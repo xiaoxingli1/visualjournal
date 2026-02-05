@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Xiaoxing Li · Visual Journal</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="container header">
+    <div>
+      <h1>YOUR REAL NAME</h1>
+      <p class="subtitle">@xiaoxingli1 · visualjournal</p>
+    </div>
+    <nav class="nav">
+      <a href="hand-drawn.html">Hand-drawn</a>
+      <a href="digital-drawn.html">Digital-drawn</a>
+      <a href="notes.html">Notes</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-text">
+        <h2>Small drawings, quietly collected.</h2>
+        <p>
+          This is a personal visual journal — sketches, doodles, and studies.
+          Not a portfolio, just a place to keep traces.
+        </p>
+        <div class="btn-row">
+          <a class="btn" href="hand-drawn.html">Browse Hand-drawn</a>
+          <a class="btn btn-ghost" href="digital-drawn.html">Browse Digital-drawn</a>
+        </div>
+      </div>
+
+      <div class="hero-covers">
+        <img class="cover" src="images/cover1.jpg" alt="Cover 1">
+        <img class="cover" src="images/cover2.jpg" alt="Cover 2">
+      </div>
+    </section>
+  </main>
+
+  <footer class="container footer">
+    <span>© <span id="year"></span> YOUR REAL NAME</span>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
+
