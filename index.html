@@ -3,50 +3,677 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Xiaoxing Li · Visual Journal</title>
-  <link rel="stylesheet" href="assets/style.css" />
+  <title>Portfolio</title>
+
+  <style>
+    :root{
+      --max: 1120px;
+      --pad: clamp(16px, 3vw, 28px);
+      --radius: 16px;
+      --muted: rgba(0,0,0,.62);
+      --border: rgba(0,0,0,.10);
+      --shadow: 0 12px 30px rgba(0,0,0,.10);
+      --shadow2: 0 18px 50px rgba(0,0,0,.14);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      line-height:1.45;
+      background:#fff;
+      color:#111;
+    }
+    a{ color:inherit; text-decoration:none; }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size: .92em;
+    }
+    button{ font:inherit; }
+
+    /* Top bar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:10;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+    .topbar-inner{
+      max-width:var(--max);
+      margin:0 auto;
+      padding: 10px var(--pad);
+      display:flex;
+      align-items:center;
+      gap: 12px;
+    }
+    .brand{
+      font-weight:650;
+      letter-spacing:.2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 48vw;
+    }
+    .nav{
+      margin-left:auto;
+      display:flex;
+      gap: 6px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .tab{
+      border:1px solid transparent;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: transparent;
+      cursor:pointer;
+      color: rgba(0,0,0,.78);
+    }
+    .tab:hover{ background: rgba(0,0,0,.05); }
+    .tab.active{
+      border-color: var(--border);
+      background: rgba(0,0,0,.04);
+      color:#111;
+    }
+
+    /* Layout */
+    main{
+      max-width:var(--max);
+      margin:0 auto;
+      padding: var(--pad);
+    }
+    .hint{
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    /* Cover (Home) */
+    .cover{
+      display:grid;
+      gap: 16px;
+      margin-top: 10px;
+      margin-bottom: 24px;
+    }
+    .cover h1{
+      font-size: clamp(28px, 4vw, 44px);
+      margin:0;
+      letter-spacing:-.5px;
+      line-height:1.15;
+    }
+    .cover-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 820px){
+      .cover-grid{ grid-template-columns: 1fr 1fr; }
+    }
+    .cover-card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      overflow:hidden;
+      box-shadow: var(--shadow2);
+      background:#fafafa;
+    }
+    .cover-card img{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+
+    /* Home category cards */
+    .home-cards{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 6px;
+    }
+    @media (min-width: 720px){
+      .home-cards{ grid-template-columns: 1fr 1fr 1fr; }
+    }
+    .home-card{
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      background: #fff;
+      padding: 14px;
+      cursor:pointer;
+      transition: transform .12s ease, box-shadow .12s ease;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      min-height: 110px;
+    }
+    .home-card:hover{
+      transform: translateY(-2px);
+      box-shadow: var(--shadow2);
+    }
+    .home-card .title{
+      font-weight: 650;
+      letter-spacing: -.2px;
+      font-size: 16px;
+    }
+    .home-card .desc{
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .pill{
+      display:inline-block;
+      font-size: 12px;
+      color: rgba(0,0,0,.72);
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.03);
+      width: fit-content;
+      margin-top: 6px;
+    }
+
+    /* Sections */
+    .section{
+      margin-top: 22px;
+    }
+    .section-title{
+      display:flex;
+      align-items:baseline;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    h2{
+      font-size: clamp(18px, 2.2vw, 22px);
+      margin: 0;
+      letter-spacing: -.2px;
+    }
+    h3{
+      font-size: 16px;
+      margin: 0;
+      letter-spacing: -.2px;
+    }
+    .count{
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Gallery grid */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 10px;
+    }
+    @media (min-width: 520px){
+      .grid{ grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); }
+    }
+    @media (min-width: 900px){
+      .grid{ grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+    }
+
+    .thumb{
+      border-radius: 14px;
+      overflow:hidden;
+      border:1px solid var(--border);
+      background:#f5f5f5;
+      cursor:pointer;
+      position:relative;
+    }
+    .thumb img{
+      width:100%;
+      height:auto;
+      display:block;
+      transition: transform .18s ease;
+    }
+    .thumb:hover img{ transform: scale(1.02); }
+
+    .subblock{
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #fff;
+      box-shadow: var(--shadow);
+      margin-top: 14px;
+    }
+    .subhead{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .subnote{
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* About (Markdown output) */
+    .about{
+      max-width: 820px;
+      margin-top: 14px;
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+    .about p { margin: 0 0 10px; }
+    .about h1,.about h2,.about h3 { margin: 14px 0 8px; }
+    .about a { text-decoration: underline; }
+    .about ul, .about ol { margin: 8px 0 10px 18px; }
+    .about blockquote{
+      margin: 10px 0;
+      padding: 10px 12px;
+      border-left: 3px solid var(--border);
+      background: rgba(0,0,0,.03);
+      border-radius: 10px;
+      color: rgba(0,0,0,.78);
+    }
+
+    .empty{
+      color: var(--muted);
+      padding: 18px;
+      border:1px dashed var(--border);
+      border-radius: var(--radius);
+      background:#fafafa;
+      margin-top: 12px;
+    }
+
+    /* Lightbox */
+    .lb{
+      position:fixed;
+      inset:0;
+      background: rgba(0,0,0,.78);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:100;
+      padding: 18px;
+    }
+    .lb.open{ display:flex; }
+    .lb-inner{
+      width:min(1100px, 100%);
+      height:min(760px, 92vh);
+      display:grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10px;
+    }
+    .lb-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      color: rgba(255,255,255,.92);
+      font-size: 14px;
+    }
+    .lb-title{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      max-width: 70vw;
+    }
+    .lb-close{
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.08);
+      color:#fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      cursor:pointer;
+    }
+    .lb-stage{
+      position:relative;
+      border-radius: 18px;
+      overflow:hidden;
+      background: rgba(0,0,0,.22);
+      border:1px solid rgba(255,255,255,.12);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .lb-stage img{
+      max-width:100%;
+      max-height:100%;
+      display:block;
+    }
+    .lb-controls{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      color: rgba(255,255,255,.92);
+      font-size: 13px;
+    }
+    .lb-btn{
+      border:1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.08);
+      color:#fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      cursor:pointer;
+      min-width: 92px;
+    }
+    .lb-btn:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+  </style>
 </head>
+
 <body>
-  <header class="container header">
-    <div>
-      <h1>Xiaoxing Li</h1>
-      <p class="subtitle">@xiaoxingli1 · visualjournal</p>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" id="brand">Portfolio</div>
+      <nav class="nav">
+        <button class="tab active" data-view="home">Home</button>
+        <button class="tab" data-view="hand-drawn">Hand-drawn</button>
+        <button class="tab" data-view="digital-drawn">Digital drawn</button>
+        <button class="tab" data-view="about">About</button>
+      </nav>
     </div>
-    <nav class="nav">
-      <a href="hand-drawn.html">Hand-drawn</a>
-      <a href="digital-drawn.html">Digital-drawn</a>
-      <a href="notes.html">Notes</a>
-    </nav>
   </header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="hero-text">
-        <h2>Small drawings, quietly collected.</h2>
-        <p>
-          This is a personal visual journal — sketches, doodles, and studies.
-          Not a portfolio, just a place to keep traces.
-        </p>
-        <div class="btn-row">
-          <a class="btn" href="hand-drawn.html">Browse Hand-drawn</a>
-          <a class="btn btn-ghost" href="digital-drawn.html">Browse Digital-drawn</a>
+  <main>
+    <section id="view-home">
+      <div class="cover">
+        <h1 id="displayName">Your Name</h1>
+
+        <div class="cover-grid">
+          <div class="cover-card"><img src="assets/cover1.jpg" alt="Cover 1"></div>
+          <div class="cover-card"><img src="assets/cover2.jpg" alt="Cover 2"></div>
+        </div>
+
+        <div class="home-cards" aria-label="Main categories">
+          <div class="home-card" data-go="hand-drawn" role="button" tabindex="0">
+            <div class="title">Hand-drawn</div>
+            <div class="desc">Traditional sketches, studies, hand-made textures.</div>
+            <div class="pill">View gallery →</div>
+          </div>
+          <div class="home-card" data-go="digital-drawn" role="button" tabindex="0">
+            <div class="title">Digital drawn</div>
+            <div class="desc">Digital illustrations, experiments, concept work.</div>
+            <div class="pill">View gallery →</div>
+          </div>
+          <div class="home-card" data-go="about" role="button" tabindex="0">
+            <div class="title">About</div>
+            <div class="desc">A short intro, links, contact, and notes.</div>
+            <div class="pill">Read more →</div>
+          </div>
+        </div>
+
+        <div class="hint">
+          Setup once: put cover images at <code>assets/cover1.jpg</code> and <code>assets/cover2.jpg</code>.
+          Galleries auto-load from <code>gallery/hand-drawn/</code> and <code>gallery/digital-drawn/</code>.
         </div>
       </div>
+    </section>
 
-      <div class="hero-covers">
-        <img class="cover" src="images/cover1.jpg" alt="Cover 1">
-        <img class="cover" src="images/cover2.jpg" alt="Cover 2">
-      </div>
+    <section id="view-hand-drawn" style="display:none;">
+      <h2>Hand-drawn</h2>
+      <div class="hint">Auto-generated from <code>gallery/hand-drawn/</code></div>
+      <div id="hand-content"></div>
+    </section>
+
+    <section id="view-digital-drawn" style="display:none;">
+      <h2>Digital drawn</h2>
+      <div class="hint">Auto-generated from <code>gallery/digital-drawn/</code></div>
+      <div id="digital-content"></div>
+    </section>
+
+    <section id="view-about" style="display:none;">
+      <h2>About</h2>
+      <div class="hint">Edit <code>about/about.md</code> (Markdown supported)</div>
+      <div class="about" id="about-box">Loading...</div>
     </section>
   </main>
 
-  <footer class="container footer">
-    <span>© <span id="year"></span> Xiaoxing Li </span>
-  </footer>
+  <!-- Lightbox -->
+  <div class="lb" id="lb" aria-hidden="true">
+    <div class="lb-inner">
+      <div class="lb-top">
+        <div class="lb-title" id="lbTitle">Image</div>
+        <button class="lb-close" id="lbClose">Close</button>
+      </div>
+      <div class="lb-stage" id="lbStage">
+        <img id="lbImg" alt="">
+      </div>
+      <div class="lb-controls">
+        <button class="lb-btn" id="lbPrev">← Prev</button>
+        <div id="lbMeta">1 / 1</div>
+        <button class="lb-btn" id="lbNext">Next →</button>
+      </div>
+    </div>
+  </div>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+  <!-- Markdown renderer (free CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+  // ========= CONFIG (change these 3 once) =========
+  const GH_USER = "xiaoxingli1";        // e.g., "lisa-li"
+  const GH_REPO = "visualjournal";            // e.g., "art-gallery"
+  const DISPLAY_NAME = "Xiaoxing Li";  // e.g., "Lisa Li"
+  // ===============================================
+
+  document.getElementById("brand").textContent = DISPLAY_NAME;
+  document.getElementById("displayName").textContent = DISPLAY_NAME;
+
+  const API_BASE = `https://api.github.com/repos/${GH_USER}/${GH_REPO}/contents`;
+
+  // Simple in-memory cache (reduces API calls)
+  const cache = new Map();
+  async function ghList(path) {
+    const key = path;
+    if (cache.has(key)) return cache.get(key);
+    const res = await fetch(`${API_BASE}/${path}`);
+    if (!res.ok) throw new Error(`GitHub API error for ${path}: ${res.status}`);
+    const json = await res.json();
+    cache.set(key, json);
+    return json;
+  }
+
+  function isImageFile(name){
+    return /\.(jpg|jpeg|png|webp|gif)$/i.test(name);
+  }
+
+  // ---------- View switching ----------
+  const tabs = Array.from(document.querySelectorAll(".tab"));
+  function setActiveView(view){
+    for (const t of tabs){
+      t.classList.toggle("active", t.dataset.view === view);
+    }
+    document.getElementById("view-home").style.display = (view === "home") ? "" : "none";
+    document.getElementById("view-hand-drawn").style.display = (view === "hand-drawn") ? "" : "none";
+    document.getElementById("view-digital-drawn").style.display = (view === "digital-drawn") ? "" : "none";
+    document.getElementById("view-about").style.display = (view === "about") ? "" : "none";
+    // scroll to top on mobile when switching
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+  tabs.forEach(btn => btn.addEventListener("click", () => setActiveView(btn.dataset.view)));
+
+  // Home cards navigation
+  document.querySelectorAll(".home-card").forEach(card => {
+    const go = () => setActiveView(card.dataset.go);
+    card.addEventListener("click", go);
+    card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") go(); });
+  });
+
+  // ---------- Lightbox ----------
+  const lb = document.getElementById("lb");
+  const lbImg = document.getElementById("lbImg");
+  const lbTitle = document.getElementById("lbTitle");
+  const lbMeta = document.getElementById("lbMeta");
+  const lbPrev = document.getElementById("lbPrev");
+  const lbNext = document.getElementById("lbNext");
+  const lbClose = document.getElementById("lbClose");
+
+  let lbList = [];
+  let lbIndex = 0;
+  let lbPrefix = "";
+
+  function openLightbox(list, index, titlePrefix){
+    lbList = list;
+    lbIndex = index;
+    lbPrefix = titlePrefix || "";
+    lb.classList.add("open");
+    lb.setAttribute("aria-hidden","false");
+    renderLightbox();
+  }
+  function closeLightbox(){
+    lb.classList.remove("open");
+    lb.setAttribute("aria-hidden","true");
+    lbList = [];
+    lbIndex = 0;
+    lbPrefix = "";
+  }
+  function renderLightbox(){
+    const item = lbList[lbIndex];
+    lbImg.src = item.url;
+    lbTitle.textContent = lbPrefix ? `${lbPrefix} — ${item.name}` : item.name;
+    lbMeta.textContent = `${lbIndex + 1} / ${lbList.length}`;
+    lbPrev.disabled = (lbIndex <= 0);
+    lbNext.disabled = (lbIndex >= lbList.length - 1);
+  }
+  lbPrev.addEventListener("click", () => { if (lbIndex > 0) { lbIndex--; renderLightbox(); } });
+  lbNext.addEventListener("click", () => { if (lbIndex < lbList.length - 1) { lbIndex++; renderLightbox(); } });
+  lbClose.addEventListener("click", closeLightbox);
+  lb.addEventListener("click", (e) => { if (e.target === lb) closeLightbox(); });
+
+  document.addEventListener("keydown", (e) => {
+    if (!lb.classList.contains("open")) return;
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowLeft" && lbIndex > 0) { lbIndex--; renderLightbox(); }
+    if (e.key === "ArrowRight" && lbIndex < lbList.length - 1) { lbIndex++; renderLightbox(); }
+  });
+
+  // Mobile swipe
+  let touchX = null;
+  document.getElementById("lbStage").addEventListener("touchstart", (e) => {
+    touchX = e.touches[0].clientX;
+  }, {passive:true});
+  document.getElementById("lbStage").addEventListener("touchend", (e) => {
+    if (touchX === null) return;
+    const endX = e.changedTouches[0].clientX;
+    const dx = endX - touchX;
+    touchX = null;
+    if (Math.abs(dx) < 35) return;
+    if (dx > 0 && lbIndex > 0) { lbIndex--; renderLightbox(); }
+    if (dx < 0 && lbIndex < lbList.length - 1) { lbIndex++; renderLightbox(); }
+  }, {passive:true});
+
+  // ---------- Render galleries ----------
+  async function renderCategory(categoryFolder, mountId, prettyTitle){
+    const mount = document.getElementById(mountId);
+    mount.innerHTML = "";
+
+    let subDirs;
+    try{
+      const items = await ghList(`gallery/${categoryFolder}`);
+      subDirs = items.filter(x => x.type === "dir");
+    }catch(err){
+      mount.innerHTML = `<div class="empty">Could not load <code>gallery/${categoryFolder}</code>. Make sure the folder exists, the repo is public, and GH_USER/GH_REPO are correct.</div>`;
+      return;
+    }
+
+    if (subDirs.length === 0){
+      mount.innerHTML = `<div class="empty">No subfolders found under <code>gallery/${categoryFolder}</code>. Create one (e.g. <code>gallery/${categoryFolder}/portraits/</code>) and add images.</div>`;
+      return;
+    }
+
+    subDirs.sort((a,b) => a.name.localeCompare(b.name));
+
+    for (const dir of subDirs){
+      const block = document.createElement("div");
+      block.className = "subblock";
+
+      const head = document.createElement("div");
+      head.className = "subhead";
+
+      const title = document.createElement("h3");
+      title.textContent = dir.name;
+
+      const note = document.createElement("div");
+      note.className = "subnote";
+      note.textContent = "";
+
+      head.appendChild(title);
+      head.appendChild(note);
+      block.appendChild(head);
+
+      const grid = document.createElement("div");
+      grid.className = "grid";
+      block.appendChild(grid);
+
+      mount.appendChild(block);
+
+      let imgs = [];
+      try{
+        const files = await ghList(`gallery/${categoryFolder}/${dir.name}`);
+        imgs = files
+          .filter(f => f.type === "file" && isImageFile(f.name) && f.download_url)
+          .sort((a,b) => a.name.localeCompare(b.name))
+          .map(f => ({ name: f.name, url: f.download_url }));
+      }catch(err){
+        grid.innerHTML = `<div class="empty">Failed to load images in <code>${dir.name}</code>.</div>`;
+        continue;
+      }
+
+      note.textContent = `${imgs.length} image${imgs.length===1?"":"s"}`;
+
+      if (imgs.length === 0){
+        grid.innerHTML = `<div class="empty">No images found in <code>gallery/${categoryFolder}/${dir.name}/</code>.</div>`;
+        continue;
+      }
+
+      imgs.forEach((img, idx) => {
+        const card = document.createElement("div");
+        card.className = "thumb";
+
+        const el = document.createElement("img");
+        el.src = img.url;
+        el.alt = img.name;
+
+        card.appendChild(el);
+        card.addEventListener("click", () => openLightbox(imgs, idx, `${prettyTitle} / ${dir.name}`));
+        grid.appendChild(card);
+      });
+    }
+  }
+
+  // ---------- About (Markdown) ----------
+  async function loadAbout(){
+    const box = document.getElementById("about-box");
+    try{
+      const res = await fetch(`https://raw.githubusercontent.com/${GH_USER}/${GH_REPO}/main/about/about.md`);
+      if (!res.ok) throw new Error("about fetch failed");
+      const md = await res.text();
+      box.innerHTML = (window.marked ? marked.parse(md) : md);
+    }catch(err){
+      box.innerHTML = `<div class="empty">Could not load <code>about/about.md</code>. Create that file and commit.</div>`;
+    }
+  }
+
+  // ---------- Init ----------
+  (async function init(){
+    if (GH_USER === "USERNAME" || GH_REPO === "REPO"){
+      document.getElementById("hand-content").innerHTML =
+        `<div class="empty">Edit <code>GH_USER</code> and <code>GH_REPO</code> in <code>index.html</code> once, then refresh.</div>`;
+      document.getElementById("digital-content").innerHTML =
+        `<div class="empty">Edit <code>GH_USER</code> and <code>GH_REPO</code> in <code>index.html</code> once, then refresh.</div>`;
+      document.getElementById("about-box").innerHTML =
+        `<div class="empty">Edit <code>GH_USER</code> and <code>GH_REPO</code> first.</div>`;
+      return;
+    }
+
+    document.getElementById("brand").textContent = DISPLAY_NAME;
+    document.getElementById("displayName").textContent = DISPLAY_NAME;
+
+    await Promise.all([
+      renderCategory("hand-drawn", "hand-content", "Hand-drawn"),
+      renderCategory("digital-drawn", "digital-content", "Digital drawn"),
+      loadAbout()
+    ]);
+  })();
+</script>
 </body>
 </html>
 
