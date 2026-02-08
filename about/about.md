@@ -1,17 +1,14 @@
 ## About
 
-I work with drawing as a way of thinking.
+Hi, I am a phd student loving drawing.
 
-My practice moves between **hand-drawn** and **digital drawn** images,  
-often focusing on observation, structure, and quiet details.
+I like to draw in my sketchbook as a way of observing, relaxing and thinking. 
 
-These works are fragments from ongoing studies rather than finished statements.
+
 
 ---
 
 **Contact**  
-email@example.com
 
 **Location**  
-Europe
 
